@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { EMAIL_REGEX } from "../../../Services/constants";
-import { useAuth } from "../../../Services/contexts/AuthProvider";
+import { useAuth } from "../../Services/contexts/AuthProvider";
 import { FaSpinner } from "react-icons/fa6";
 
 function SignUp() {

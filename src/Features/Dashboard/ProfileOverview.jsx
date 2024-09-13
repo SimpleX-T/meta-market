@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../../../Services/contexts/AuthProvider";
+import { useAuth } from "../../Services/contexts/AuthProvider";
 import Spinner from "../../UI/Spinner";
 
 function ProfileOverview() {

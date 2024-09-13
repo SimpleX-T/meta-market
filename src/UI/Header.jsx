@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { ethers } from "ethers";
 import Logo from "./Logo";
 import { useState } from "react";
-import { useAuth } from "../../Services/contexts/AuthProvider";
+import { useAuth } from "../Services/contexts/AuthProvider";
 import {
 	FaGift,
 	FaHome,

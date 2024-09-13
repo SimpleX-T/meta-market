@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../../../Services/contexts/AuthProvider";
+import { useAuth } from "../../Services/contexts/AuthProvider";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { EMAIL_REGEX } from "../../../Services/constants";

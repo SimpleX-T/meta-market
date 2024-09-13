@@ -10,7 +10,7 @@ import {
 	FaQuestionCircle,
 	FaCog,
 } from "react-icons/fa";
-import { useAuth } from "../../../Services/contexts/AuthProvider";
+import { useAuth } from "../../Services/contexts/AuthProvider";
 import { MdLogout } from "react-icons/md";
 
 const dashboardLinks = [
