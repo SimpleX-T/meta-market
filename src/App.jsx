@@ -4,7 +4,7 @@ import { AuthProvider } from "./Services/contexts/AuthProvider";
 
 import AppLayout from "./UI/AppLayout";
 import Home from "./Features/LandingPage/Home";
-import ProtectedRoute from "../Services/Routes/ProtectedRoute";
+import ProtectedRoute from "./Services/Routes/ProtectedRoute";
 import Dashboard from "./Features/Dashboard/Dashboard";
 import Login from "./Features/Account/Login";
 import SignUp from "./Features/Account/SignUp";
