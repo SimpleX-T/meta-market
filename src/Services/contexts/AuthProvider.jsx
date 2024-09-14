@@ -11,7 +11,14 @@ function AuthProvider({ children }) {
 
 	useEffect(() => {
 		const storedUser = JSON.parse(localStorage.getItem("user"));
-		const walletAddress = localStorage.getItem("walletAddress");
+		let walletAddress;
+
+		const wagmiStore = localStorage.getItem("wagmi.store") || {};
+		const { state } = JSON.parse(wagmiStore);
+
+		if (state.connections.value.length > 0) {
+			walletAddress = state.connections.value[0][1].accounts[0];
+		} else walletAddress = localStorage.getItem("walletAddress");
 
 		if (storedUser) {
 			setUser(storedUser);

@@ -107,7 +107,7 @@ function BlurryCircle() {
 
 	return (
 		<div
-			className='w-32 h-32 rounded-full absolute -z-10 bg-gradient-to-tr from-[var(--accent-blue)] via-[var(--accent-green)] to-[var(--accent-purple)]'
+			className='w-32 h-32 hidden md:block rounded-full absolute -z-10 bg-gradient-to-tr from-[var(--accent-blue)] via-[var(--accent-green)] to-[var(--accent-purple)]'
 			style={{
 				left: `${position.x}px`,
 				top: `${position.y}px`,
