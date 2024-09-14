@@ -79,7 +79,8 @@ function AuthProvider({ children }) {
 					name: "Test Account",
 					email: "geekbuddy33@gmail.com",
 					walletAddress,
-					profilePhoto: "",
+					profilePhoto:
+						"https://res.cloudinary.com/dzwzpjlw8/image/upload/v1726237097/m2yshmbov0flvumyhrff.jpg",
 					joinDate: "1999-01-01T18:00:00.692Z",
 				};
 				setUser(testUser);
