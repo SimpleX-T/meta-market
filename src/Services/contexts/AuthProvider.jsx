@@ -74,27 +74,47 @@ function AuthProvider({ children }) {
 
 	async function handleLogin(email) {
 		try {
-			const response = await fetch(
-				`http://localhost:3000/users?email=${email}`
-			);
-
-			const data = await response.json();
-
-			if (data.length > 0) {
-				const user = data[0];
-				setUser(user);
-				localStorage.setItem("user", JSON.stringify(user));
+			if (email.toLowerCase() === "geekbuddy33@gmail.com") {
+				const testUser = {
+					name: "Test Account",
+					email: "geekbuddy33@gmail.com",
+					walletAddress,
+					profilePhoto: "",
+					joinDate: "1999-01-01T18:00:00.692Z",
+				};
+				setUser(testUser);
+				localStorage.setItem("user", JSON.stringify(testUser));
 				navigate("/dashboard");
-				return user;
-			} else {
-				alert(
-					"User not found, please make sure to input the correct email and try again!"
+				return testUser;
+			} else
+				throw new Error(
+					"Email is not correct, try using the correct email provided by the developer foe testing!"
 				);
-				throw new Error("No user found");
-			}
 		} catch (error) {
-			console.error("Error logging in:", error);
+			console.error(error.message);
 		}
+		// try {
+		// 	const response = await fetch(
+		// 		`http://localhost:3000/users?email=${email}`
+		// 	);
+
+		// 	const data = await response.json();
+
+		// 	if (data.length > 0) {
+		// 		const user = data[0];
+		// 		setUser(user);
+		// 		localStorage.setItem("user", JSON.stringify(user));
+		// 		navigate("/dashboard");
+		// 		return user;
+		// 	} else {
+		// 		alert(
+		// 			"User not found, please make sure to input the correct email and try again!"
+		// 		);
+		// 		throw new Error("No user found");
+		// 	}
+		// } catch (error) {
+		// 	console.error("Error logging in:", error);
+		// }
 	}
 
 	function logout() {

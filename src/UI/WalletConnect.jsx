@@ -9,7 +9,6 @@ function WalletConnect() {
 
 	useEffect(() => {
 		if (address) {
-			console.log("calling again!");
 			handleConnectWallet(address);
 		}
 	}, [address]);
