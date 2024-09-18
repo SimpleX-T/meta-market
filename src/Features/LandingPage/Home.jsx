@@ -14,7 +14,8 @@ const nfts = [
 	},
 	{
 		id: 3,
-		imageUrl: "nfts/nft3.jpg",
+		imageUrl:
+			"https://res.cloudinary.com/dzwzpjlw8/image/upload/v1726663649/dqak9l29jppl6yhg61su.jpg",
 	},
 	{
 		id: 4,

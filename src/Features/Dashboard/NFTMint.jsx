@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useAuth } from "../../Services/contexts/AuthProvider";
 function NFTMint() {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [price, setPrice] = useState("");
 	const [image, setImage] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const { user } = useAuth();
 
 	// const getImageData = (file) => {
 	// 	return new Promise((resolve, reject) => {
@@ -66,22 +68,34 @@ function NFTMint() {
 		try {
 			setIsLoading(true);
 			const uploadedImage = await uploadImage();
-			const newNFT = { title, description, price, image: uploadedImage };
+			const newNFT = {
+				...user,
+				nfts: [
+					...user.nfts,
+					{
+						id: Math.random(),
+						title,
+						description,
+						price,
+						image: uploadedImage,
+					},
+				],
+			};
 
-			const res = await fetch("http://localhost:3000/nfts", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(newNFT),
-			});
+			// const res = await fetch(`http://localhost:3000/users/${user.id}`, {
+			// 	method: "PATCH",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// 	body: JSON.stringify(newNFT),
+			// });
 
-			if (!res.ok)
-				throw new Error("Sorry, couldn't upload NFT at the moment");
+			// if (!res.ok)
+			// 	throw new Error("Sorry, couldn't upload NFT at the moment");
 
-			const data = await res.json();
+			// const data = await res.json();
 
-			console.log(data);
+			console.log(user);
 		} catch (error) {
 			console.error("Couldn't upload NFT: ", error.message);
 		} finally {

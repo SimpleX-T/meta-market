@@ -46,6 +46,8 @@ function SignUp() {
 				walletAddress,
 				profilePhoto: profilePhoto ? profilePhoto : "",
 				joinDate,
+				nfts: [],
+				sales: [],
 			};
 			console.log(userData);
 

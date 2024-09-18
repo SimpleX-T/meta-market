@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import Spinner from "../../UI/Spinner";
 
 const ProtectedRoute = ({ children }) => {
-	const { user, loading, setUser } = useAuth();
+	const { user, loading, handleLogout } = useAuth();
 	const navigate = useNavigate();
 
 	if (loading) {
@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
 	if (!user) {
 		navigate("/login");
 
-		setUser(null);
+		handleLogout();
 		localStorage.removeItem("user");
 	}
 

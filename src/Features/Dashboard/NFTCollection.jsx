@@ -1,21 +1,31 @@
 import { useEffect, useState } from "react";
 import ImagePreview from "../../UI/ImagePreview";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../Services/contexts/AuthProvider";
 
 const NFTCollection = () => {
 	const [NFTs, setNFTs] = useState([]);
+	const { user } = useAuth();
 	const [isImagePreview, setIsImagePreview] = useState(false);
 	const [curImage, setCurImage] = useState({});
 
 	useEffect(() => {
 		const fetchNFTs = async () => {
-			const response = await fetch("http://localhost:3000/nfts");
-			const data = await response.json();
-			setNFTs(data);
+			try {
+				const response = await fetch(
+					`http://localhost:3000/users/${user?.id}`
+				);
+				if (!response.ok) {
+				}
+				const data = await response.json();
+				setNFTs(data.nfts);
+			} catch (error) {
+				console.error("Failed to fetch Collection: ", error.message);
+			}
 		};
 
 		fetchNFTs();
-	}, []);
+	}, [user.id]);
 
 	const handleImagePreview = (image) => {
 		setIsImagePreview(true);
