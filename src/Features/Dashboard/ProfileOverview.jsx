@@ -3,9 +3,9 @@ import { useAuth } from "../../Services/contexts/AuthProvider";
 import Spinner from "../../UI/Spinner";
 
 function ProfileOverview() {
-	const { user, loading } = useAuth();
+	const { user, isLoading } = useAuth();
 
-	if (loading) return <Spinner />;
+	if (isLoading) return <Spinner />;
 
 	return (
 		<div className='p-6 bg-[var(--primary-dark)] rounded-lg shadow-md'>

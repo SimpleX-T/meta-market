@@ -3,10 +3,10 @@ import { useAuth } from "../contexts/AuthProvider";
 import Spinner from "../../UI/Spinner";
 
 const ProtectedRoute = ({ children }) => {
-	const { user, loading, handleLogout } = useAuth();
+	const { user, isLoading, handleLogout } = useAuth();
 	const navigate = useNavigate();
 
-	if (loading) {
+	if (isLoading) {
 		return <Spinner />;
 	}
 

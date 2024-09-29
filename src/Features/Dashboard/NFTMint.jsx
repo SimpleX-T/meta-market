@@ -76,6 +76,7 @@ function NFTMint() {
 						id: Math.random(),
 						title,
 						description,
+						owner: user.walletAddress,
 						price,
 						image: uploadedImage,
 					},

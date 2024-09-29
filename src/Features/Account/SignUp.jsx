@@ -3,14 +3,24 @@ import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { EMAIL_REGEX } from "../../Services/constants";
 import { useAuth } from "../../Services/contexts/AuthProvider";
-import { FaSpinner } from "react-icons/fa6";
+import { FaRegEye, FaRegEyeSlash, FaSpinner } from "react-icons/fa6";
+import GoogleAuthButton from "../../Auth/GoogleAuthButton";
 
 function SignUp() {
-	const [isLoading, setIsLoading] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 	const [profilePhoto, setProfilePhoto] = useState("");
-	const { handleConnectWallet, walletAddress, handleNewUser } = useAuth();
+	const {
+		handleConnectWallet,
+		walletAddress,
+		handleNewUser,
+		isLoading,
+		setIsLoading,
+		handleGoogleSignIn,
+	} = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -30,6 +40,26 @@ function SignUp() {
 			return;
 		}
 
+		if (!password.trim()) {
+			alert("Please enter your password.");
+			return;
+		}
+
+		if (password.length < 8) {
+			alert("Password must be at least 8 characters long.");
+			return;
+		}
+
+		if (password !== confirmPassword) {
+			alert("Passwords do not match.");
+			return;
+		}
+
+		if (!confirmPassword.trim()) {
+			alert("Please confirm your password.");
+			return;
+		}
+
 		if (!walletAddress) {
 			alert("Please connect your wallet to continue!");
 			handleConnectWallet();
@@ -43,6 +73,7 @@ function SignUp() {
 			const userData = {
 				name,
 				email,
+				password,
 				walletAddress,
 				profilePhoto: profilePhoto ? profilePhoto : "",
 				joinDate,
@@ -109,6 +140,60 @@ function SignUp() {
 							/>
 						</div>
 
+						<div className='relative'>
+							<label
+								htmlFor='password'
+								className='block text-md font-medium text-gray-50 mb-2'>
+								Password
+							</label>
+							<input
+								id='password'
+								type={showPassword ? "text" : "password"}
+								className='w-full px-3 py-2 bg-[#0a0e1750] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								placeholder='********'
+							/>
+							<button
+								type='button'
+								className='absolute right-2 bottom-1 transform -translate-y-1/2 text-gray-500 hover:text-gray-300'
+								onClick={() => setShowPassword(!showPassword)}>
+								{showPassword ? (
+									<FaRegEyeSlash className='h-5 w-5' />
+								) : (
+									<FaRegEye className='h-5 w-5' />
+								)}
+							</button>
+						</div>
+
+						<div className='relative'>
+							<label
+								htmlFor='confirmPassword'
+								className='block text-md font-medium text-gray-50 mb-2'>
+								Confirm Password
+							</label>
+							<input
+								id='confirmPassword'
+								type={showPassword ? "text" : "password"}
+								className='w-full px-3 py-2 bg-[#0a0e1750] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+								value={confirmPassword}
+								onChange={(e) =>
+									setConfirmPassword(e.target.value)
+								}
+								placeholder='********'
+							/>
+							<button
+								type='button'
+								className='absolute right-2 bottom-1 transform -translate-y-1/2 text-gray-500 hover:text-gray-300'
+								onClick={() => setShowPassword(!showPassword)}>
+								{showPassword ? (
+									<FaRegEyeSlash className='h-5 w-5' />
+								) : (
+									<FaRegEye className='h-5 w-5' />
+								)}
+							</button>
+						</div>
+
 						<div>
 							<label
 								htmlFor='pfp'
@@ -166,10 +251,7 @@ function SignUp() {
 						</div>
 					</div>
 					<div className='mt-6'>
-						<button className='w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-200 bg-[var(--primary-light)] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'>
-							<FcGoogle className='h-5 w-5 mr-2' />
-							Sign up with Google
-						</button>
+						<GoogleAuthButton onClick={handleGoogleSignIn} />
 					</div>
 					<div className='flex items-center gap-2 w-5/6 mx-auto mt-4'>
 						<p className='text-center text-white text-sm'>

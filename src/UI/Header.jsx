@@ -37,7 +37,7 @@ function Header() {
 	const { walletAddress, handleConnectWallet } = useAuth();
 
 	return (
-		<header className='flex items-center gap-4 bg-[#0a0e1760] border border-[#8cacf220] backdrop-blur-md w-[90%] md:w-5/6 h-18 md:h-24 rounded-lg z-[5] absolute left-1/2 transform -translate-x-1/2 top-6 px-3 md:p-8 mx-auto'>
+		<header className='flex items-center gap-4 bg-[#0a0e1760] border border-[#8cacf220] backdrop-blur-md w-[90%] md:w-5/6 h-20 md:h-24 rounded-lg z-[5] absolute left-1/2 transform -translate-x-1/2 top-6 px-3 md:p-8 mx-auto'>
 			<Logo />
 
 			<nav className='md:flex hidden items-center mr-auto gap-8'>

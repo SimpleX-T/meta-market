@@ -1,12 +1,19 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFirebaseAuth, googleProvider } from "../../config/firebase";
+import {
+	signInWithEmailAndPassword,
+	signOut,
+	createUserWithEmailAndPassword,
+	signInWithPopup,
+} from "firebase/auth";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
 	const [user, setUser] = useState(null);
 	const [walletAddress, setWalletAddress] = useState("");
-	const [loading, setLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -28,7 +35,7 @@ function AuthProvider({ children }) {
 			setWalletAddress(walletAddress);
 		}
 
-		setLoading(false);
+		setIsLoading(false);
 	}, []);
 
 	async function handleConnectWallet(address) {
@@ -40,16 +47,14 @@ function AuthProvider({ children }) {
 
 	async function handleNewUser(userData) {
 		try {
-			const response = await fetch("http://localhost:3000/users", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(userData),
-			});
-			const data = await response.json();
-			if (data) handleLogin(data.email);
-			return data;
+			const data = await createUserWithEmailAndPassword(
+				useFirebaseAuth,
+				userData.email,
+				userData.password
+			);
+			console.log(data);
+			// if (data) handleLogin(data.email);
+			// return data;
 		} catch (error) {
 			console.error("Error creating user:", error);
 		}
@@ -72,47 +77,23 @@ function AuthProvider({ children }) {
 		}
 	}
 
-	async function handleLogin(email) {
-		// try {
-		// 	if (email.toLowerCase() === "geekbuddy33@gmail.com") {
-		// 		const testUser = {
-		// 			name: "Test Account",
-		// 			email: "geekbuddy33@gmail.com",
-		// 			walletAddress,
-		// 			profilePhoto:
-		// 				"https://res.cloudinary.com/dzwzpjlw8/image/upload/v1726237097/m2yshmbov0flvumyhrff.jpg",
-		// 			joinDate: "1999-01-01T18:00:00.692Z",
-		// 			nfts: [],
-		// 			sales: [],
-		// 		};
-		// 		setUser(testUser);
-		// 		localStorage.setItem("user", JSON.stringify(testUser));
-		// 		navigate("/dashboard");
-		// 		return testUser;
-		// 	} else
-		// 		throw new Error(
-		// 			"Email is not correct, try using the correct email provided by the developer foe testing!"
-		// 		);
-		// } catch (error) {
-		// 	console.error(error.message);
-		// }
+	async function handleLogin(email, password) {
 		try {
-			const response = await fetch(
-				`http://localhost:3000/users?email=${email}`
+			const data = await signInWithEmailAndPassword(
+				useFirebaseAuth,
+				email,
+				password
 			);
 
-			const data = await response.json();
+			console.log(data);
 
-			if (data.length > 0) {
-				const user = data[0];
+			if (!data) {
+				const { user } = data;
 				setUser(user);
 				localStorage.setItem("user", JSON.stringify(user));
 				navigate("/dashboard");
 				return user;
 			} else {
-				alert(
-					"User not found, please make sure to input the correct email and try again!"
-				);
 				throw new Error("No user found");
 			}
 		} catch (error) {
@@ -120,7 +101,22 @@ function AuthProvider({ children }) {
 		}
 	}
 
-	function logout() {
+	const handleGoogleSignIn = async () => {
+		try {
+			setIsLoading(true);
+			const data = await signInWithPopup(useFirebaseAuth, googleProvider);
+			const { user } = data;
+
+			return user;
+		} catch (error) {
+			console.error("Error signing in with Google:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	async function logout() {
+		await signOut(useFirebaseAuth);
 		navigate("/login");
 		setUser(null);
 		localStorage.removeItem("user");
@@ -131,13 +127,15 @@ function AuthProvider({ children }) {
 			value={{
 				user,
 				walletAddress,
-				loading,
+				isLoading,
+				setIsLoading,
 				handleConnectWallet,
 				handleLogin,
 				logout,
 				handleLogout: logout,
 				handleNewUser,
 				updateUser: handleUpdateUser,
+				handleGoogleSignIn,
 			}}>
 			{children}
 		</AuthContext.Provider>

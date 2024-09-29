@@ -3,12 +3,21 @@ import { useAuth } from "../../Services/contexts/AuthProvider";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { EMAIL_REGEX } from "../../Services/constants";
-import { FaSpinner } from "react-icons/fa6";
+import { FaRegEye, FaRegEyeSlash, FaSpinner } from "react-icons/fa6";
+import GoogleAuthButton from "../../Auth/GoogleAuthButton";
 
 function Login() {
 	const [email, setEmail] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const { handleLogin, walletAddress, handleConnectWallet } = useAuth();
+	const [password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+	const {
+		handleLogin,
+		walletAddress,
+		handleConnectWallet,
+		handleGoogleSignIn,
+		isLoading,
+		setIsLoading,
+	} = useAuth();
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -23,6 +32,16 @@ function Login() {
 			return;
 		}
 
+		if (!password.trim()) {
+			alert("Please enter your password.");
+			return;
+		}
+
+		if (password.length < 8) {
+			alert("Password must be at least 8 characters long.");
+			return;
+		}
+
 		if (!walletAddress) {
 			alert("Please connect your wallet to continue!");
 			const address = await handleConnectWallet(); // Connect wallet
@@ -32,7 +51,7 @@ function Login() {
 
 		try {
 			setIsLoading(true);
-			const data = await handleLogin(email);
+			const data = await handleLogin(email, password);
 			if (!data)
 				throw new Error("User not found, make sure to check the email");
 		} catch (error) {
@@ -67,6 +86,31 @@ function Login() {
 								placeholder='test@example.com'
 							/>
 						</div>
+						<div className='relative'>
+							<label
+								htmlFor='password'
+								className='block text-md font-medium text-gray-50 mb-2'>
+								Password
+							</label>
+							<input
+								id='password'
+								type={showPassword ? "text" : "password"}
+								className='w-full px-3 py-2 bg-[#0a0e1750] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+								defaultValue={password}
+								onChange={(e) => setPassword(e.target.value)}
+								placeholder='********'
+							/>
+							<button
+								type='button'
+								className='absolute right-2 bottom-1 transform -translate-y-1/2 text-gray-500 hover:text-gray-300'
+								onClick={() => setShowPassword(!showPassword)}>
+								{showPassword ? (
+									<FaRegEyeSlash className='h-5 w-5' />
+								) : (
+									<FaRegEye className='h-5 w-5' />
+								)}
+							</button>
+						</div>
 						<button
 							type='submit'
 							className='w-full flex items-center justify-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'>
@@ -91,10 +135,7 @@ function Login() {
 						</div>
 					</div>
 					<div className='mt-6'>
-						<button className='w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-200 bg-[var(--primary-light)] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'>
-							<FcGoogle className='h-5 w-5 mr-2' />
-							Sign in with Google
-						</button>
+						<GoogleAuthButton onClick={handleGoogleSignIn} />
 					</div>
 					<div className='flex items-center gap-2 w-5/6 mx-auto mt-4'>
 						<p className='text-center text-sm text-white'>

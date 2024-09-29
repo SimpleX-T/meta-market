@@ -3,7 +3,7 @@ import { useAuth } from "../../Services/contexts/AuthProvider";
 import Spinner from "../../UI/Spinner";
 
 function UserSettings() {
-	const { user, loading, updateUser } = useAuth();
+	const { user, isLoading, updateUser } = useAuth();
 	const [name, setName] = useState(user.name);
 	const [email, setEmail] = useState(user.email);
 	const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto);
@@ -21,7 +21,7 @@ function UserSettings() {
 		updateUser(user.id, updatedUser);
 	};
 
-	if (loading) return <Spinner />;
+	if (isLoading) return <Spinner />;
 
 	return (
 		<div className='p-6 bg-[var(--primary-dark)] rounded-lg shadow-md'>
